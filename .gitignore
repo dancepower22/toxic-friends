@@ -11,8 +11,10 @@ ENV/
 # Logs
 *.log
 
-# Data
+# Data - 保留示例文件，忽略实际配置
 data/config.json
+data/*.json
+!data/config.json.example
 
 # IDE
 .vscode/
