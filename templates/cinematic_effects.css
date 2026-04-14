@@ -1,0 +1,506 @@
+/* 电影质感效果和动画 - 赛博朋克风格 */
+
+/* 电影胶片边框效果 */
+.film-border {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+}
+
+.film-border::before,
+.film-border::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 10px;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(0, 243, 255, 0.1) 20%, 
+        rgba(0, 243, 255, 0.3) 50%, 
+        rgba(0, 243, 255, 0.1) 80%, 
+        transparent 100%);
+    animation: filmScan 3s linear infinite;
+}
+
+.film-border::before {
+    top: 0;
+}
+
+.film-border::after {
+    bottom: 0;
+}
+
+/* 电影扫描线效果 */
+.scanlines {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        to bottom,
+        transparent 50%,
+        rgba(0, 243, 255, 0.03) 50%
+    );
+    background-size: 100% 4px;
+    pointer-events: none;
+    z-index: 9998;
+    animation: scanlinesMove 20s linear infinite;
+}
+
+/* CRT显示器效果 */
+.crt-effect {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(
+            ellipse at center,
+            rgba(0, 243, 255, 0.1) 0%,
+            transparent 70%
+        ),
+        repeating-radial-gradient(
+            circle at 50% 50%,
+            transparent,
+            transparent 2px,
+            rgba(0, 243, 255, 0.02) 3px,
+            rgba(0, 243, 255, 0.02) 4px
+        );
+    pointer-events: none;
+    z-index: 9997;
+    mix-blend-mode: overlay;
+}
+
+/* 霓虹光晕效果 */
+.neon-glow {
+    position: relative;
+}
+
+.neon-glow::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: inherit;
+    box-shadow: 
+        0 0 20px currentColor,
+        0 0 40px currentColor,
+        0 0 60px currentColor;
+    opacity: 0;
+    z-index: -1;
+    animation: neonFlicker 3s infinite alternate;
+}
+
+/* 全息投影效果 */
+.hologram-effect {
+    position: relative;
+    overflow: hidden;
+}
+
+.hologram-effect::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        45deg,
+        transparent 30%,
+        rgba(0, 243, 255, 0.1) 50%,
+        transparent 70%
+    );
+    animation: hologramScan 4s linear infinite;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* 数据流效果 */
+.data-stream {
+    position: relative;
+    overflow: hidden;
+}
+
+.data-stream::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(0, 255, 157, 0.2),
+        transparent
+    );
+    animation: dataFlow 3s linear infinite;
+}
+
+/* 脉冲波效果 */
+.pulse-wave {
+    position: relative;
+}
+
+.pulse-wave::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(0, 243, 255, 0.3);
+    transform: translate(-50%, -50%);
+    animation: pulseExpand 2s ease-out infinite;
+}
+
+/* 电影标题效果 */
+.cinematic-title {
+    font-family: 'Orbitron', 'Roboto Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    position: relative;
+    display: inline-block;
+}
+
+.cinematic-title::before,
+.cinematic-title::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 50px;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--cyber-neon-blue), transparent);
+    transform: translateY(-50%);
+}
+
+.cinematic-title::before {
+    right: calc(100% + 20px);
+}
+
+.cinematic-title::after {
+    left: calc(100% + 20px);
+}
+
+/* 电影字幕效果 */
+.cinematic-subtitle {
+    font-family: 'Cinzel', serif;
+    font-style: italic;
+    letter-spacing: 2px;
+    position: relative;
+    padding-bottom: 10px;
+}
+
+.cinematic-subtitle::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--cyber-neon-pink), transparent);
+}
+
+/* 电影转场效果 */
+.transition-fade {
+    animation: fadeInOut 2s ease-in-out;
+}
+
+.transition-slide {
+    animation: slideIn 1s ease-out;
+}
+
+.transition-zoom {
+    animation: zoomIn 0.8s ease-out;
+}
+
+/* 电影镜头光晕 */
+.lens-flare {
+    position: fixed;
+    top: 20%;
+    left: 30%;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(
+        circle,
+        rgba(255, 255, 255, 0.8) 0%,
+        rgba(255, 255, 255, 0.4) 30%,
+        transparent 70%
+    );
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9996;
+    mix-blend-mode: screen;
+    animation: lensFlareMove 30s infinite linear;
+}
+
+/* 电影颗粒效果 */
+.film-grain {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" opacity="0.05"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noise)"/></svg>');
+    pointer-events: none;
+    z-index: 9995;
+    animation: grainMove 8s steps(10) infinite;
+}
+
+/* 电影色彩分级 */
+.color-grade {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        linear-gradient(rgba(0, 243, 255, 0.05), transparent),
+        linear-gradient(90deg, rgba(255, 0, 255, 0.05), transparent);
+    pointer-events: none;
+    z-index: 9994;
+    mix-blend-mode: overlay;
+}
+
+/* 电影边框阴影 */
+.cinematic-shadow {
+    box-shadow: 
+        0 0 0 1px rgba(0, 243, 255, 0.1),
+        0 0 30px rgba(0, 0, 0, 0.8),
+        0 0 60px rgba(0, 0, 0, 0.6);
+}
+
+/* 电影聚焦效果 */
+.focus-effect {
+    position: relative;
+}
+
+.focus-effect::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+    border: 2px solid rgba(0, 243, 255, 0.3);
+    border-radius: 12px;
+    animation: focusPulse 3s infinite;
+    pointer-events: none;
+}
+
+/* 电影深度效果 */
+.depth-effect {
+    transform-style: preserve-3d;
+    perspective: 1000px;
+}
+
+.depth-layer {
+    transform: translateZ(20px);
+    transition: transform 0.5s ease;
+}
+
+.depth-layer:hover {
+    transform: translateZ(40px);
+}
+
+/* 动画定义 */
+@keyframes filmScan {
+    0% { opacity: 0.3; }
+    50% { opacity: 0.8; }
+    100% { opacity: 0.3; }
+}
+
+@keyframes scanlinesMove {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(100px); }
+}
+
+@keyframes hologramScan {
+    0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+    100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+}
+
+@keyframes dataFlow {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+@keyframes pulseExpand {
+    0% {
+        width: 0;
+        height: 0;
+        opacity: 0.8;
+    }
+    100% {
+        width: 300px;
+        height: 300px;
+        opacity: 0;
+    }
+}
+
+@keyframes fadeInOut {
+    0% { opacity: 0; }
+    50% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+@keyframes slideIn {
+    0% {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes zoomIn {
+    0% {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes lensFlareMove {
+    0% { transform: translate(0, 0) rotate(0deg); }
+    25% { transform: translate(50vw, 25vh) rotate(90deg); }
+    50% { transform: translate(25vw, 50vh) rotate(180deg); }
+    75% { transform: translate(75vw, 75vh) rotate(270deg); }
+    100% { transform: translate(0, 0) rotate(360deg); }
+}
+
+@keyframes grainMove {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(-100px, -100px); }
+}
+
+@keyframes focusPulse {
+    0%, 100% { opacity: 0.3; transform: scale(1); }
+    50% { opacity: 0.8; transform: scale(1.05); }
+}
+
+@keyframes cinematicFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes cinematicShake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-2px); }
+    20%, 40%, 60%, 80% { transform: translateX(2px); }
+}
+
+@keyframes cinematicVignette {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.7; }
+}
+
+/* 电影质感应用类 */
+.cinematic-float {
+    animation: cinematicFloat 3s ease-in-out infinite;
+}
+
+.cinematic-shake {
+    animation: cinematicShake 0.5s ease-in-out;
+}
+
+.cinematic-vignette {
+    position: relative;
+}
+
+.cinematic-vignette::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(
+        circle at center,
+        transparent 30%,
+        rgba(0, 0, 0, 0.5) 100%
+    );
+    pointer-events: none;
+    z-index: 1;
+    animation: cinematicVignette 4s infinite alternate;
+}
+
+/* 电影时间码效果 */
+.timecode {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 0.9rem;
+    color: var(--cyber-neon-blue);
+    letter-spacing: 2px;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 5px 10px;
+    border-radius: 4px;
+    border: 1px solid var(--cyber-neon-blue);
+    z-index: 10000;
+}
+
+/* 电影帧率指示器 */
+.fps-indicator {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--cyber-neon-green);
+    background: rgba(0, 0, 0, 0.5);
+    padding: 3px 8px;
+    border-radius: 3px;
+    border: 1px solid var(--cyber-neon-green);
+    z-index: 10000;
+}
+
+/* 电影宽高比 */
+.cinematic-aspect {
+    aspect-ratio: 16/9;
+    position: relative;
+    overflow: hidden;
+}
+
+.cinematic-aspect::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 2px solid rgba(0, 243, 255, 0.2);
+    pointer-events: none;
+}
+
+/* 电影胶片计数 */
+.film-counter {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 0.9rem;
+    color: var(--cyber-neon-pink);
+    background: rgba(0, 0, 0, 0.5);
+    padding: 5px 10px;
+    border-radius: 4px;
+    border: 1px solid var(--cyber-neon-pink);
+    z-index: 10000;
+}

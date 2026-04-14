@@ -1,0 +1,247 @@
+/* 毒舌等级按钮组件 - 赛博朋克风格 */
+
+/* 毒舌等级选择器容器 */
+.toxicity-selector {
+    margin: 30px 0;
+    text-align: center;
+}
+
+.toxicity-label {
+    display: block;
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+    color: var(--cyber-text);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    position: relative;
+}
+
+.toxicity-label::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--cyber-neon-blue), transparent);
+}
+
+/* 毒舌等级按钮容器 */
+.toxicity-buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin: 20px 0;
+}
+
+@media (max-width: 768px) {
+    .toxicity-buttons {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .toxicity-buttons {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+}
+
+/* 毒舌等级按钮基础样式 */
+.toxicity-btn {
+    padding: 18px 10px;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 1.1rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    background: var(--cyber-surface-light);
+    color: var(--cyber-text);
+    border: 2px solid transparent;
+}
+
+/* 按钮发光边框效果 */
+.toxicity-btn::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, 
+        var(--cyber-neon-blue), 
+        var(--cyber-neon-pink), 
+        var(--cyber-neon-green), 
+        var(--cyber-neon-yellow));
+    border-radius: 10px;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+/* 按钮悬停效果 */
+.toxicity-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.toxicity-btn:hover::before {
+    opacity: 0.5;
+}
+
+/* 按钮选中状态 */
+.toxicity-btn.selected {
+    transform: translateY(-2px);
+    box-shadow: 0 0 20px currentColor;
+}
+
+/* 等级1：柔和 - 蓝色主题 */
+.toxicity-btn.level-1 {
+    color: var(--cyber-neon-blue);
+    border-color: var(--cyber-neon-blue);
+}
+
+.toxicity-btn.level-1.selected {
+    background: rgba(0, 243, 255, 0.1);
+    box-shadow: 0 0 20px var(--cyber-glow-blue);
+    animation: pulseBlue 2s infinite alternate;
+}
+
+/* 等级2：直白 - 绿色主题 */
+.toxicity-btn.level-2 {
+    color: var(--cyber-neon-green);
+    border-color: var(--cyber-neon-green);
+}
+
+.toxicity-btn.level-2.selected {
+    background: rgba(0, 255, 157, 0.1);
+    box-shadow: 0 0 20px var(--cyber-glow-green);
+    animation: pulseGreen 2s infinite alternate;
+}
+
+/* 等级3：狠辣 - 黄色主题 */
+.toxicity-btn.level-3 {
+    color: var(--cyber-neon-yellow);
+    border-color: var(--cyber-neon-yellow);
+}
+
+.toxicity-btn.level-3.selected {
+    background: rgba(255, 255, 0, 0.1);
+    box-shadow: 0 0 20px rgba(255, 255, 0, 0.7);
+    animation: pulseYellow 2s infinite alternate;
+}
+
+/* 等级4：疯狂 - 粉色主题 */
+.toxicity-btn.level-4 {
+    color: var(--cyber-neon-pink);
+    border-color: var(--cyber-neon-pink);
+}
+
+.toxicity-btn.level-4.selected {
+    background: rgba(255, 0, 255, 0.1);
+    box-shadow: 0 0 20px var(--cyber-glow-pink);
+    animation: pulsePink 2s infinite alternate;
+}
+
+/* 等级描述 */
+.toxicity-desc {
+    display: block;
+    font-size: 0.9rem;
+    margin-top: 5px;
+    opacity: 0.8;
+    font-weight: normal;
+    text-transform: none;
+    letter-spacing: 0;
+}
+
+/* 当前等级指示器 */
+.current-level-indicator {
+    margin-top: 15px;
+    padding: 10px;
+    background: rgba(26, 26, 46, 0.6);
+    border-radius: 8px;
+    border-left: 3px solid var(--cyber-neon-blue);
+}
+
+.current-level-text {
+    font-size: 1.1rem;
+    color: var(--cyber-text);
+}
+
+.current-level-name {
+    color: var(--cyber-neon-blue);
+    font-weight: bold;
+}
+
+/* 动画定义 */
+@keyframes pulseBlue {
+    0% { box-shadow: 0 0 10px var(--cyber-glow-blue); }
+    100% { box-shadow: 0 0 25px var(--cyber-glow-blue), 0 0 35px var(--cyber-glow-blue); }
+}
+
+@keyframes pulseGreen {
+    0% { box-shadow: 0 0 10px var(--cyber-glow-green); }
+    100% { box-shadow: 0 0 25px var(--cyber-glow-green), 0 0 35px var(--cyber-glow-green); }
+}
+
+@keyframes pulseYellow {
+    0% { box-shadow: 0 0 10px rgba(255, 255, 0, 0.7); }
+    100% { box-shadow: 0 0 25px rgba(255, 255, 0, 0.7), 0 0 35px rgba(255, 255, 0, 0.7); }
+}
+
+@keyframes pulsePink {
+    0% { box-shadow: 0 0 10px var(--cyber-glow-pink); }
+    100% { box-shadow: 0 0 25px var(--cyber-glow-pink), 0 0 35px var(--cyber-glow-pink); }
+}
+
+/* 按钮点击效果 */
+.toxicity-btn:active {
+    transform: translateY(1px);
+    transition: transform 0.1s ease;
+}
+
+/* 禁用状态 */
+.toxicity-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+.toxicity-btn:disabled::before {
+    opacity: 0;
+}
+
+/* 等级强度指示条 */
+.level-intensity {
+    height: 4px;
+    background: var(--cyber-border);
+    border-radius: 2px;
+    margin: 10px 0;
+    overflow: hidden;
+    position: relative;
+}
+
+.level-intensity-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--cyber-neon-blue), var(--cyber-neon-green), var(--cyber-neon-yellow), var(--cyber-neon-pink));
+    border-radius: 2px;
+    transition: width 0.5s ease;
+}
+
+/* 等级提示 */
+.level-hint {
+    font-size: 0.9rem;
+    color: var(--cyber-text-dim);
+    margin-top: 5px;
+    text-align: center;
+    font-style: italic;
+}

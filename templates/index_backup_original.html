@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>毒舌老友 - 六位老友陪吐槽</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .friend-selector {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .friend-card {
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .friend-card:hover {
+            border-color: #4CAF50;
+            background-color: #f9f9f9;
+        }
+        .friend-card.selected {
+            border-color: #4CAF50;
+            background-color: #e8f5e9;
+        }
+        .friend-avatar {
+            font-size: 2em;
+            margin-bottom: 5px;
+        }
+        .toxicity-slider {
+            margin: 20px 0;
+        }
+        .toxicity-levels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 5px;
+        }
+        .toxicity-level {
+            text-align: center;
+            font-size: 0.9em;
+            color: #666;
+        }
+        .chat-area {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            height: 300px;
+            overflow-y: auto;
+            background-color: #fafafa;
+        }
+        .message {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 8px;
+            max-width: 80%;
+        }
+        .user-message {
+            background-color: #e3f2fd;
+            margin-left: auto;
+        }
+        .friend-message {
+            background-color: #f1f8e9;
+            margin-right: auto;
+        }
+        .input-area {
+            display: flex;
+            gap: 10px;
+        }
+        input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>毒舌老友 🎭</h1>
+        <p style="text-align: center; color: #666;">选择一位老友，调整毒舌等级，开始吐槽吧！</p>
+        
+        <div class="friend-selector" id="friendSelector">
+            <!-- 朋友卡片将通过JS动态生成 -->
+        </div>
+        
+        <div class="toxicity-slider">
+            <label for="toxicity">毒舌等级: <span id="toxicityValue">2</span></label>
+            <input type="range" id="toxicity" min="1" max="4" value="2" step="1">
+            <div class="toxicity-levels">
+                <div class="toxicity-level">1级: 柔和</div>
+                <div class="toxicity-level">2级: 直白</div>
+                <div class="toxicity-level">3级: 狠辣</div>
+                <div class="toxicity-level">4级: 疯狂</div>
+            </div>
+        </div>
+        
+        <div class="chat-area" id="chatArea">
+            <!-- 聊天消息将在这里显示 -->
+        </div>
+        
+        <div class="input-area">
+            <input type="text" id="messageInput" placeholder="输入你想吐槽的人或事..." onkeypress="handleKeyPress(event)">
+            <button id="sendButton" onclick="sendMessage()">发送</button>
+            <button id="startButton" onclick="startChat()">开始聊天</button>
+        </div>
+        
+        <div style="text-align: center; margin-top: 20px; color: #888; font-size: 0.9em;">
+            <p>提示：选择一位老友，调整毒舌等级，然后点击"开始聊天"按钮开始对话</p>
+        </div>
+    </div>
+
+    <script>
+        let currentFriend = 'chandler';
+        let currentToxicity = 2;
+        let chatStarted = false;
+        
+        // 朋友数据
+        const friends = {
+            'ross': { name: '罗斯', avatar: '🦕', intro: '古生物学家，学霸' },
+            'rachel': { name: '瑞秋', avatar: '👗', intro: '时尚达人' },
+            'monica': { name: '莫妮卡', avatar: '🍳', intro: '厨师，完美主义者' },
+            'chandler': { name: '钱德勒', avatar: '😎', intro: '幽默担当' },
+            'joey': { name: '乔伊', avatar: '🍕', intro: '演员，吃货' },
+            'phoebe': { name: '菲比', avatar: '🎸', intro: '按摩师，古灵精怪' }
+        };
+        
+        // 初始化朋友选择器
+        function initFriendSelector() {
+            const selector = document.getElementById('friendSelector');
+            selector.innerHTML = '';
+            
+            for (const [id, friend] of Object.entries(friends)) {
+                const card = document.createElement('div');
+                card.className = 'friend-card';
+                if (id === currentFriend) {
+                    card.classList.add('selected');
+                }
+                card.innerHTML = `
+                    <div class="friend-avatar">${friend.avatar}</div>
+                    <div><strong>${friend.name}</strong></div>
+                    <div style="font-size: 0.8em; color: #666;">${friend.intro}</div>
+                `;
+                card.onclick = () => selectFriend(id);
+                selector.appendChild(card);
+            }
+        }
+        
+        function selectFriend(friendId) {
+            currentFriend = friendId;
+            initFriendSelector();
+            if (chatStarted) {
+                startChat(); // 重新开始聊天
+            }
+        }
+        
+        // 初始化毒舌等级滑块
+        document.getElementById('toxicity').addEventListener('input', function(e) {
+            currentToxicity = parseInt(e.target.value);
+            document.getElementById('toxicityValue').textContent = currentToxicity;
+            if (chatStarted) {
+                updateToxicityLevel();
+            }
+        });
+        
+        function addMessage(text, isUser = false) {
+            const chatArea = document.getElementById('chatArea');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user-message' : 'friend-message'}`;
+            messageDiv.textContent = text;
+            chatArea.appendChild(messageDiv);
+            chatArea.scrollTop = chatArea.scrollHeight;
+        }
+        
+        async function startChat() {
+            const startButton = document.getElementById('startButton');
+            startButton.disabled = true;
+            startButton.textContent = '连接中...';
+            
+            try {
+                const response = await fetch('/api/start', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        friend: currentFriend,
+                        toxicity: currentToxicity
+                    })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    chatStarted = true;
+                    
+                    // 清空聊天区域
+                    document.getElementById('chatArea').innerHTML = '';
+                    
+                    // 显示开场白
+                    addMessage(data.reply);
+                    
+                    // 更新UI
+                    document.getElementById('sendButton').disabled = false;
+                    document.getElementById('messageInput').disabled = false;
+                    document.getElementById('messageInput').focus();
+                    startButton.textContent = '重新开始';
+                    startButton.disabled = false;
+                } else {
+                    throw new Error('启动失败');
+                }
+            } catch (error) {
+                addMessage('启动失败，请重试');
+                startButton.textContent = '开始聊天';
+                startButton.disabled = false;
+            }
+        }
+        
+        async function updateToxicityLevel() {
+            try {
+                const response = await fetch('/api/level', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        toxicity: currentToxicity
+                    })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    addMessage(`毒舌等级已调整为: ${data.level_name} (${data.toxicity}级)`);
+                }
+            } catch (error) {
+                console.error('更新毒舌等级失败:', error);
+            }
+        }
+        
+        async function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            
+            if (!message || !chatStarted) return;
+            
+            // 显示用户消息
+            addMessage(message, true);
+            input.value = '';
+            
+            // 发送到服务器
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: message
+                    })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    addMessage(data.reply);
+                } else {
+                    addMessage('抱歉，我好像卡住了...');
+                }
+            } catch (error) {
+                addMessage('网络错误，请重试');
+            }
+        }
+        
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+        
+        // 页面加载时初始化
+        window.onload = function() {
+            initFriendSelector();
+            document.getElementById('sendButton').disabled = true;
+            document.getElementById('messageInput').disabled = true;
+        };
+    </script>
+</body>
+</html>

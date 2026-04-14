@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>毒舌老友 - 六位老友陪吐槽</title>
+    <style>
+        /* ============================================
+           赛博朋克主题 - 毒舌老友优化版
+           ============================================ */
+        
+        /* 基础变量 */
+        :root {
+            --cyber-dark: #0a0a1a;
+            --cyber-darker: #050510;
+            --cyber-neon-blue: #00f3ff;
+            --cyber-neon-pink: #ff00ff;
+            --cyber-neon-green: #00ff9d;
+            --cyber-neon-yellow: #ffff00;
+            --cyber-neon-purple: #9d00ff;
+            --cyber-glow-blue: rgba(0, 243, 255, 0.7);
+            --cyber-glow-pink: rgba(255, 0, 255, 0.7);
+            --cyber-glow-green: rgba(0, 255, 157, 0.7);
+            --cyber-text: #e0e0ff;
+            --cyber-text-dim: #a0a0c0;
+            --cyber-border: #2a2a4a;
+            --cyber-surface: #1a1a2e;
+            --cyber-surface-light: #2a2a4a;
+        }
+
+        /* 基础样式重置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Roboto Mono', monospace;
+            background: linear-gradient(135deg, var(--cyber-darker) 0%, var(--cyber-dark) 100%);
+            color: var(--cyber-text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* 赛博朋克背景效果 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(0, 243, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(255, 0, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(0, 255, 157, 0.1) 0%, transparent 50%);
+            z-index: -1;
+            animation: gridPulse 20s infinite alternate;
+        }
+
+        /* 网格线效果 */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 243, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 243, 255, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        /* 容器样式 */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 30px;
+            position: relative;
+        }
+
+        /* 标题样式 */
+        h1 {
+            text-align: center;
+            font-size: 3rem;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, var(--cyber-neon-blue), var(--cyber-neon-pink));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 10px var(--cyber-glow-blue);
+            position: relative;
+            animation: titleGlow 3s infinite alternate;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--cyber-neon-blue), transparent);
+            border-radius: 2px;
+        }
+
+        /* 副标题 */
+        .subtitle {
+            text-align: center;
+            color: var(--cyber-text-dim);
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+        }
+
+        /* 卡片容器 */
+        .card-container {
+            background: rgba(26, 26, 46, 0.8);
+            border: 1px solid var(--cyber-border);
+            border-radius: 15px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            box-shadow: 
+                0 0 30px rgba(0, 243, 255, 0.2),
+                inset 0 0 20px rgba(0, 243, 255, 0.1);
+            margin-bottom: 25px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--cyber-neon-blue), transparent);
+            animation: scanLine 4s infinite linear;
+        }
+
+        /* ============================================
+           朋友选择器 - 赛博朋克风格
+           ============================================ */
+        
+        .section-title {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: var(--cyber-neon-blue);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 20px;
+            background: var(--cyber-neon-blue);
+            border-radius: 2px;
+        }
+
+        .friend-selector {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        @media (max-width: 768px) {
+            .friend-selector {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .container {
+                padding: 15px;
+            }
+            
+            .card-container {
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .friend-selector {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .subtitle {
+                font-size: 0.95rem;
+            }
+        }
+
+        .friend-card {
+            background: rgba(42, 42, 74, 0.6);
+            border: 2px solid var(--cyber-border);
+            border-radius: 12px;
+            padding: 15px 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .friend-card:hover {
+            border-color: var(--cyber-neon-blue);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(0, 243, 255, 0.3);
+        }
+
+        .friend-card.selected {
+            border-color: var(--cyber-neon-blue);
+            background: rgba(0, 243, 255, 0.1);
+            box-shadow: 0 0 20px var(--cyber-glow-blue);
+        }
+
+        .friend-card.selected::after {
+            content: '✓';
+            position: absolute;
+            top: 5px;
+            right: 8px;
+            color: var(--cyber-neon-green);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .friend-avatar {
+            font-size: 2.5em;
+            margin-bottom: 8px;
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
+        }
+
+        .friend-name {
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: var(--cyber-text);
+            margin-bottom: 3px;
+        }
+
+        .friend-intro {
+            font-size: 0.85rem;
+            color: var(--cyber-text-dim);
+        }
+
+        /* ============================================
+           毒舌等级按钮组件 - 赛博朋克风格
+           ============================================ */
+        
+        .toxicity-selector {
+            margin: 25px 0;
+        }
+
+        .toxicity-buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin: 15px 0;
+        }
+
+        @media (max-width: 768px) {
+            .toxicity-buttons {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .toxicity-buttons {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+        }
+
+        .toxicity-btn {
+            padding: 15px 10px;
+            border: 2px solid;
+            border-radius: 10px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(42, 42, 74, 0.6);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .toxicity-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .toxicity-btn.selected {
+            transform: translateY(-2px);
+        }
+
+        /* 等级1：柔和 - 蓝色主题 */
+        .toxicity-btn.level-1 {
+            color: var(--cyber-neon-blue);
+            border-color: var(--cyber-neon-blue);
+        }
+
+        .toxicity-btn.level-1.selected {
+            background: rgba(0, 243, 255, 0.15);
+            box-shadow: 0 0 20px var(--cyber-glow-blue);
+            animation: pulseBlue 2s infinite alternate;
+        }
+
+        /* 等级2：直白 - 绿色主题 */
+        .toxicity-btn.level-2 {
+            color: var(--cyber-neon-green);
+            border-color: var(--cyber-neon-green);
+        }
+
+        .toxicity-btn.level-2.selected {
+            background: rgba(0, 255, 157, 0.15);
+            box-shadow: 0 0 20px var(--cyber-glow-green);
+            animation: pulseGreen 2s infinite alternate;
+        }
+
+        /* 等级3：狠辣 - 黄色主题 */
+        .toxicity-btn.level-3 {
+            color: var(--cyber-neon-yellow);
+            border-color: var(--cyber-neon-yellow);
+        }
+
+        .toxicity-btn.level-3.selected {
+            background: rgba(255, 255, 0, 0.15);
+            box-shadow: 0 0 20px rgba(255, 255, 0, 0.7);
+            animation: pulseYellow 2s infinite alternate;
+        }
+
+        /* 等级4：疯狂 - 粉色主题 */
+        .toxicity-btn.level-4 {
+            color: var(--cyber-neon-pink);
+            border-color: var(--cyber-neon-pink);
+        }
+
+        .toxicity-btn.level-4.selected {
+            background: rgba(255, 0, 255, 0.15);
+            box-shadow: 0 0 20px var(--cyber-glow-pink);
+            animation: pulsePink 2s infinite alternate;
+        }
+
+        .toxicity-desc {
+            display: block;
+            font-size: 0.8rem;
+            margin-top: 4px;
+            opacity: 0.8;
+            font-weight: normal;
+            text-transform: none;
+            letter-spacing: 0;
+        }
+
+        /* 当前等级指示器 */
+        .current-level-indicator {
+            margin-top: 15px;
+            padding: 12px;
+            background: rgba(26, 26, 46, 0.8);
+            border-radius: 8px;
+            border-left: 3px solid var(--cyber-neon-blue);
+            text-align: center;
+        }
+
+        .current-level-text {
+            font-size: 1rem;
+            color: var(--cyber-text);
+        }
+
+        .current-level-name {
+            color: var(--cyber-neon-blue);
+            font-weight: bold;
+        }
+
+        /* ============================================
+           按钮布局和操作流程
+           ============================================ */
+        
+        .action-section {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid var(--cyber-border);
+        }
+
+        .main-buttons-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .main-btn {
+            padding: 18px 30px;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .main-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .main-btn:hover::before {
+            left: 100%;
+        }
+
+        /* 开始聊天按钮 */
+        .start-chat-btn {
+            background: linear-gradient(135deg, var(--cyber-neon-blue), var(--cyber-neon-purple));
+            color: white;
+            border: 2px solid var(--cyber-neon-blue);
+        }
+
+        .start-chat-btn:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 243, 255, 0.4);
+        }
+
+        .start-chat-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        /* 重新开始按钮 */
+        .restart-btn {
+            background: linear-gradient(135deg, rgba(255, 0, 255, 0.2), rgba(157, 0, 255, 0.2));
+            color: var(--cyber-neon-pink);
+            border: 2px solid var(--cyber-neon-pink);
+        }
+
+        .restart-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(255, 0, 255, 0.3);
+            background: linear-gradient(135deg, rgba(255, 0, 255, 0.3), rgba(157, 0, 255, 0.3));
+        }
+
+        /* 按钮图标 */
+        .btn-icon {
+            font-size: 1.4rem;
+        }
+
+        /* ============================================
+           聊天区域 - 赛博朋克风格
+           ============================================ */
+        
+        .chat-area {
+            border: 2px solid var(--cyber-border);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            height: 350px;
+            overflow-y: auto;
+            background: rgba(10, 10, 26, 0.9);
+            position: relative;
+        }
+
+        .chat-area::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                linear-gradient(rgba(0, 243, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 243, 255, 0.02) 1px, transparent 1px);
+            background-size: 20px 20px;
+            pointer-events: none;
+        }
+
+        .chat-area::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .chat-area::-webkit-scrollbar-track {
+            background: rgba(26, 26, 46, 0.5);
+            border-radius: 4px;
+        }
+
+        .chat-area::-webkit-scrollbar-thumb {
+            background: var(--cyber-neon-blue);
+            border-radius: 4px;
+        }
+
+        .message {
+            margin: 12px 0;
+            padding: 12px 16px;
+            border-radius: 12px;
+            max-width: 85%;
+            position: relative;
+            animation: messageSlide 0.3s ease-out;
+            line-height: 1.5;
+        }
+
+        @keyframes messageSlide {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .user-message {
+            background: linear-gradient(135deg, rgba(0, 243, 255, 0.2), rgba(0, 243, 255, 0.1));
+            border: 1px solid var(--cyber-neon-blue);
+            margin-left: auto;
+            color: var(--cyber-text);
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.2);
+        }
+
+        .friend-message {
+            background: linear-gradient(135deg, rgba(0, 255, 157, 0.2), rgba(0, 255, 157, 0.1));
+            border: 1px solid var(--cyber-neon-green);
+            margin-right: auto;
+            color: var(--cyber-text);
+            box-shadow: 0 0 10px rgba(0, 255, 157, 0.2);
+        }
+
+        .message-sender {
+            font-size: 0.8rem;
+            color: var(--cyber-text-dim);
+            margin-bottom: 4px;
+            font-weight: bold;
+        }
+
+        /* 聊天控制区域 */
+        .chat-controls {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        @media (max-width: 768px) {
+            .chat-controls {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .message-input {
+            padding: 15px;
+            border: 2px solid var(--cyber-border);
+            border-radius: 10px;
+            background: rgba(26, 26, 46, 0.8);
+            color: var(--cyber-text);
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .message-input:focus {
+            outline: none;
+            border-color: var(--cyber-neon-blue);
+            box-shadow: 0 0 15px var(--cyber-glow-blue);
+        }
+
+        .message-input::placeholder {
+            color: var(--cyber-text-dim);
+        }
+
+        .message-input:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .send-btn {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, var(--cyber-neon-green), var(--cyber-neon-blue));
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 100px;
+        }
+
+        .send-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 255, 157, 0.4);
+        }
+
+        .send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        /* 状态指示器 */
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin: 15px 0;
+            padding: 12px;
+            background: rgba(26, 26, 46, 0.6);
+            border-radius: 8px;
+            border-left: 3px solid var(--cyber-neon-blue);
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--cyber-neon-green);
+            animation: statusPulse 2s infinite;
+        }
+
+        .status-text {
+            font-size: 1rem;
+            color: var(--cyber-text);
+        }
+
+        .status-waiting .status-dot {
+            background: var(--cyber-neon-yellow);
+            animation: statusPulse 1s infinite;
+        }
+
+        /* ============================================
+           电影质感特效
+           ============================================ */
+        
+        /* 扫描线效果 */
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                to bottom,
+                transparent 50%,
+                rgba(0, 243, 255, 0.03) 50%
+            );
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 9998;
+        }
+
+        /* CRT显示器效果 */
+        .crt-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(
+                ellipse at center,
+                transparent 0%,
+                rgba(0, 0, 0, 0.2) 100%
+            );
+            pointer-events: none;
+            z-index: 9997;
+        }
+
+        /* 电影胶片颗粒 */
+        .film-grain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" opacity="0.03"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3"/></filter><rect width="100%" height="100%" filter="url(%23noise)"/></svg>');
+            pointer-events: none;
+            z-index: 9996;
+        }
+
+        /* ============================================
+           动画定义
+           ============================================ */
+        
+        @keyframes gridPulse {
+            0% { opacity: 0.3; }
+            100% { opacity: 0.6; }
+        }
+
+        @keyframes titleGlow {
+            0% { text-shadow: 0 0 10px var(--cyber-glow-blue); }
+            100% { text-shadow: 0 0 20px var(--cyber-glow-pink), 0 0 30px var(--cyber-glow-blue); }
+        }
+
+        @keyframes scanLine {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        @keyframes pulseBlue {
+            0% { box-shadow: 0 0 10px var(--cyber-glow-blue); }
+            100% { box-shadow: 0 0 25px var(--cyber-glow-blue), 0 0 35px var(--cyber-glow-blue); }
+        }
+
+        @keyframes pulseGreen {
+            0% { box-shadow: 0 0 10px var(--cyber-glow-green); }
+            100% { box-shadow: 0 0 25px var(--cyber-glow-green), 0 0 35px var(--cyber-glow-green); }
+        }
+
+        @keyframes pulseYellow {
+            0% { box-shadow: 0 0 10px rgba(255, 255, 0, 0.7); }
+            100% { box-shadow: 0 0 25px rgba(255, 255, 0, 0.7), 0 0 35px rgba(255, 255, 0, 0.7); }
+        }
+
+        @keyframes pulsePink {
+            0% { box-shadow: 0 0 10px var(--cyber-glow-pink); }
+            100% { box-shadow: 0 0 25px var(--cyber-glow-pink), 0 0 35px var(--cyber-glow-pink); }
+        }
+
+        @keyframes statusPulse {
+            0% { opacity: 0.3; }
+            50% { opacity: 1; }
+            100% { opacity: 0.3; }
+        }
+
+        /* 操作提示 */
+        .operation-hint {
+            text-align: center;
+            color: var(--cyber-text-dim);
+            font-size: 0.9rem;
+            margin-top: 15px;
+            padding: 12px;
+            background: rgba(26, 26, 46, 0.4);
+            border-radius: 8px;
+            border: 1px dashed var(--cyber-border);
+        }
+
+        /* 隐藏元素 */
+        .hidden {
+            display: none !important;
+        }
+
+        /* 打字指示器 */
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 12px 16px;
+            background: rgba(0, 255, 157, 0.1);
+            border: 1px solid var(--cyber-neon-green);
+            border-radius: 12px;
+            max-width: 100px;
+            margin: 10px 0;
+        }
+
+        .typing-indicator span {
+            width: 8px;
+            height: 8px;
+            background: var(--cyber-neon-green);
+            border-radius: 50%;
+            animation: typingBounce 1.4s infinite ease-in-out both;
+        }
+
+        .typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
+        .typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes typingBounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <!-- 电影质感特效层 -->
+    <div class="scanlines"></div>
+    <div class="crt-overlay"></div>
+    <div class="film-grain"></div>
+
+    <div class="container">
+        <!-- 标题区域 -->
+        <h1>毒舌老友 🎭</h1>
+        <p class="subtitle">选择一位老友，调整毒舌等级，开始吐槽吧！</p>
+        
+        <!-- 步骤1: 选择老友 -->
+        <div class="card-container">
+            <div class="section-title">步骤 1: 选择老友</div>
+            <div class="friend-selector" id="friendSelector">
+                <!-- 朋友卡片将通过JS动态生成 -->
+            </div>
+        </div>
+        
+        <!-- 步骤2: 选择毒舌等级 -->
+        <div class="card-container">
+            <div class="section-title">步骤 2: 选择毒舌等级</div>
+            <div class="toxicity-selector">
+                <div class="toxicity-buttons">
+                    <button class="toxicity-btn level-1" data-level="1" onclick="selectToxicity(1)">
+                        柔和
+                        <span class="toxicity-desc">温和吐槽</span>
+                    </button>
+                    <button class="toxicity-btn level-2" data-level="2" onclick="selectToxicity(2)">
+                        直白
+                        <span class="toxicity-desc">直戳痛点</span>
+                    </button>
+                    <button class="toxicity-btn level-3" data-level="3" onclick="selectToxicity(3)">
+                        狠辣
+                        <span class="toxicity-desc">火力全开</span>
+                    </button>
+                    <button class="toxicity-btn level-4" data-level="4" onclick="selectToxicity(4)">
+                        疯狂
+                        <span class="toxicity-desc">极致毒舌</span>
+                    </button>
+                </div>
+                <div class="current-level-indicator">
+                    <span class="current-level-text">当前等级: <span class="current-level-name" id="currentLevelName">直白</span></span>
+                </div>
+            </div>
+            
+            <!-- 步骤3: 开始聊天 -->
+            <div class="action-section">
+                <div class="section-title">步骤 3: 开始对话</div>
+                <div class="main-buttons-container" id="actionButtons">
+                    <button class="main-btn start-chat-btn" id="startButton" onclick="startChat()">
+                        <span class="btn-icon">🚀</span>
+                        <span>开始聊天</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 聊天区域 -->
+        <div class="card-container" id="chatContainer" style="display: none;">
+            <div class="section-title">💬 对话记录</div>
+            <div class="chat-area" id="chatArea">
+                <!-- 聊天消息将在这里显示 -->
+            </div>
+            
+            <div class="chat-controls">
+                <input type="text" id="messageInput" class="message-input" placeholder="输入你想吐槽的人或事..." onkeypress="handleKeyPress(event)" disabled>
+                <button id="sendButton" class="send-btn" onclick="sendMessage()" disabled>发送</button>
+            </div>
+            
+            <div class="operation-hint">
+                提示: 按 Enter 键快速发送消息
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // 毒舌老友 - JavaScript 控制逻辑
+        // ============================================
+        
+        let currentFriend = 'chandler';
+        let currentToxicity = 2;
+        let chatStarted = false;
+        
+        // 朋友数据
+        const friends = {
+            'ross': { name: '罗斯', avatar: '🦕', intro: '古生物学家，学霸' },
+            'rachel': { name: '瑞秋', avatar: '👗', intro: '时尚达人' },
+            'monica': { name: '莫妮卡', avatar: '🍳', intro: '厨师，完美主义者' },
+            'chandler': { name: '钱德勒', avatar: '😎', intro: '幽默担当' },
+            'joey': { name: '乔伊', avatar: '🍕', intro: '演员，吃货' },
+            'phoebe': { name: '菲比', avatar: '🎸', intro: '按摩师，古灵精怪' }
+        };
+        
+        // 毒舌等级名称
+        const toxicityNames = {
+            1: '柔和',
+            2: '直白',
+            3: '狠辣',
+            4: '疯狂'
+        };
+        
+        // ============================================
+        // 初始化
+        // ============================================
+        
+        function init() {
+            initFriendSelector();
+            initToxicityButtons();
+        }
+        
+        // 初始化朋友选择器
+        function initFriendSelector() {
+            const selector = document.getElementById('friendSelector');
+            selector.innerHTML = '';
+            
+            for (const [id, friend] of Object.entries(friends)) {
+                const card = document.createElement('div');
+                card.className = 'friend-card' + (id === currentFriend ? ' selected' : '');
+                card.innerHTML = `
+                    <div class="friend-avatar">${friend.avatar}</div>
+                    <div class="friend-name">${friend.name}</div>
+                    <div class="friend-intro">${friend.intro}</div>
+                `;
+                card.onclick = () => selectFriend(id);
+                selector.appendChild(card);
+            }
+        }
+        
+        // 初始化毒舌等级按钮
+        function initToxicityButtons() {
+            updateToxicityButtons();
+        }
+        
+        // ============================================
+        // 选择功能
+        // ============================================
+        
+        function selectFriend(friendId) {
+            currentFriend = friendId;
+            initFriendSelector();
+            
+            // 如果聊天已开始，提示用户重新开始
+            if (chatStarted) {
+                showRestartHint('更换了老友，是否重新开始对话？');
+            }
+        }
+        
+        function selectToxicity(level) {
+            currentToxicity = level;
+            updateToxicityButtons();
+            
+            // 如果聊天已开始，更新等级
+            if (chatStarted) {
+                updateToxicityLevel();
+            }
+        }
+        
+        function updateToxicityButtons() {
+            // 更新按钮选中状态
+            document.querySelectorAll('.toxicity-btn').forEach(btn => {
+                const level = parseInt(btn.dataset.level);
+                if (level === currentToxicity) {
+                    btn.classList.add('selected');
+                } else {
+                    btn.classList.remove('selected');
+                }
+            });
+            
+            // 更新当前等级显示
+            document.getElementById('currentLevelName').textContent = toxicityNames[currentToxicity];
+            document.getElementById('currentLevelName').style.color = getToxicityColor(currentToxicity);
+        }
+        
+        function getToxicityColor(level) {
+            const colors = {
+                1: 'var(--cyber-neon-blue)',
+                2: 'var(--cyber-neon-green)',
+                3: 'var(--cyber-neon-yellow)',
+                4: 'var(--cyber-neon-pink)'
+            };
+            return colors[level] || 'var(--cyber-neon-blue)';
+        }
+        
+        // ============================================
+        // 聊天功能
+        // ============================================
+        
+        async function startChat() {
+            const startButton = document.getElementById('startButton');
+            startButton.disabled = true;
+            startButton.innerHTML = '<span class="btn-icon">⏳</span><span>连接中...</span>';
+            
+            try {
+                const response = await fetch('/api/start', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        friend: currentFriend,
+                        toxicity: currentToxicity
+                    })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    chatStarted = true;
+                    
+                    // 显示聊天容器
+                    document.getElementById('chatContainer').style.display = 'block';
+                    
+                    // 清空聊天区域
+                    document.getElementById('chatArea').innerHTML = '';
+                    
+                    // 显示开场白
+                    addMessage(data.reply, false, friends[currentFriend].name);
+                    
+                    // 更新UI
+                    document.getElementById('sendButton').disabled = false;
+                    document.getElementById('messageInput').disabled = false;
+                    document.getElementById('messageInput').focus();
+                    
+                    // 更新按钮为重新开始
+                    updateActionButtonToRestart();
+                    
+                    // 滚动到聊天区域
+                    document.getElementById('chatContainer').scrollIntoView({ behavior: 'smooth' });
+                } else {
+                    throw new Error('启动失败');
+                }
+            } catch (error) {
+                addMessage('连接失败，请重试', false, '系统');
+                startButton.disabled = false;
+                startButton.innerHTML = '<span class="btn-icon">🚀</span><span>开始聊天</span>';
+            }
+        }
+        
+        function updateActionButtonToRestart() {
+            const container = document.getElementById('actionButtons');
+            container.innerHTML = `
+                <button class="main-btn restart-btn" id="restartButton" onclick="restartChat()">
+                    <span class="btn-icon">🔄</span>
+                    <span>重新开始</span>
+                </button>
+            `;
+        }
+        
+        function updateActionButtonToStart() {
+            const container = document.getElementById('actionButtons');
+            container.innerHTML = `
+                <button class="main-btn start-chat-btn" id="startButton" onclick="startChat()">
+                    <span class="btn-icon">🚀</span>
+                    <span>开始聊天</span>
+                </button>
+            `;
+        }
+        
+        function restartChat() {
+            chatStarted = false;
+            document.getElementById('chatContainer').style.display = 'none';
+            document.getElementById('chatArea').innerHTML = '';
+            document.getElementById('sendButton').disabled = true;
+            document.getElementById('messageInput').disabled = true;
+            document.getElementById('messageInput').value = '';
+            updateActionButtonToStart();
+        }
+        
+        async function updateToxicityLevel() {
+            try {
+                const response = await fetch('/api/level', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        toxicity: currentToxicity
+                    })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    addMessage(`毒舌等级已调整为: ${data.level_name} (${data.toxicity}级)`, false, '系统');
+                }
+            } catch (error) {
+                console.error('更新毒舌等级失败:', error);
+            }
+        }
+        
+        async function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            
+            if (!message || !chatStarted) return;
+            
+            // 显示用户消息
+            addMessage(message, true, '你');
+            input.value = '';
+            
+            // 显示打字指示器
+            showTypingIndicator();
+            
+            // 发送到服务器
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: message
+                    })
+                });
+                
+                // 移除打字指示器
+                removeTypingIndicator();
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    addMessage(data.reply, false, friends[currentFriend].name);
+                } else {
+                    addMessage('抱歉，我好像卡住了...', false, friends[currentFriend].name);
+                }
+            } catch (error) {
+                removeTypingIndicator();
+                addMessage('网络错误，请重试', false, '系统');
+            }
+        }
+        
+        function addMessage(text, isUser = false, sender = '') {
+            const chatArea = document.getElementById('chatArea');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user-message' : 'friend-message'}`;
+            
+            if (sender) {
+                messageDiv.innerHTML = `<div class="message-sender">${sender}</div><div>${escapeHtml(text)}</div>`;
+            } else {
+                messageDiv.textContent = text;
+            }
+            
+            chatArea.appendChild(messageDiv);
+            chatArea.scrollTop = chatArea.scrollHeight;
+        }
+        
+        function showTypingIndicator() {
+            const chatArea = document.getElementById('chatArea');
+            const indicator = document.createElement('div');
+            indicator.className = 'typing-indicator';
+            indicator.id = 'typingIndicator';
+            indicator.innerHTML = '<span></span><span></span><span></span>';
+            chatArea.appendChild(indicator);
+            chatArea.scrollTop = chatArea.scrollHeight;
+        }
+        
+        function removeTypingIndicator() {
+            const indicator = document.getElementById('typingIndicator');
+            if (indicator) {
+                indicator.remove();
+            }
+        }
+        
+        function showRestartHint(message) {
+            // 可以在这里添加一个提示框，询问用户是否重新开始
+            // 目前简单处理：在聊天区域添加提示
+            if (chatStarted) {
+                addMessage(`${message} 点击"重新开始"按钮即可。`, false, '提示');
+            }
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+        
+        // 页面加载时初始化
+        window.onload = init;
+    </script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  toxic-friends:
+    build: .
+    container_name: toxic-friends
+    restart: unless-stopped
+    ports:
+      - "5004:5004"
+    environment:
+      - FLASK_ENV=production
+      - TZ=Asia/Shanghai
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:5004/health', timeout=2)"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  nginx:
+    image: nginx:alpine
+    container_name: toxic-friends-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./ssl:/etc/nginx/ssl:ro
+      - ./logs/nginx:/var/log/nginx
+    depends_on:
+      - toxic-friends
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
